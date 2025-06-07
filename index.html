@@ -49,7 +49,18 @@
         </tbody>
       </table>
 
-      <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">TUKARKAN POIN</button>
+      <!-- Dropdown Pilih Hadiah -->
+      <label for="selected-reward" class="block mb-2 font-medium">Pilih Hadiah yang Ingin Ditukar:</label>
+      <select id="selected-reward" class="w-full p-2 mb-4 border rounded">
+        <option value="Diskon R55.000">Diskon R55.000 (20 poin)</option>
+        <option value="Top-up 70 UC">Top-up 70 UC (50 poin)</option>
+        <option value="Voucher Diskon Akun Totap 1K">Voucher Diskon Akun Totap 1K (100 poin)</option>
+      </select>
+
+      <!-- Tombol WA -->
+      <button onclick="tukarkanViaWA()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        TUKARKAN POIN VIA WHATSAPP
+      </button>
     </div>
     <p class="text-sm text-gray-500 mt-4">🎉 <strong>Promo Aktif:</strong> Double Point setiap Jumat – Janganakan!</p>
   </div>
@@ -84,6 +95,18 @@
         console.error("Error saat login:", error);
         alert("Gagal menghubungi server. Coba ulangi nanti.");
       }
+    }
+
+    function tukarkanViaWA() {
+      const waAdmin = "6283137362010"; // GANTI dengan nomor WA Bro Bi
+      const username = document.getElementById("username").value;
+      const totalPoint = document.getElementById("total-point").innerText;
+      const reward = document.getElementById("selected-reward").value;
+
+      const pesan = `Halo kak, saya ingin menukarkan DhaniPoint.\nUsername: ${username}\nTotal Point saya: ${totalPoint}\nHadiah yang ingin ditukar: ${reward}`;
+      const encodedPesan = encodeURIComponent(pesan);
+
+      window.location.href = `https://wa.me/${waAdmin}?text=${encodedPesan}`;
     }
   </script>
 
