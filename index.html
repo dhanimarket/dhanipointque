@@ -2,113 +2,167 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <title>DhaniPoint Login + Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DhaniPointque</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .neon-box {
+      border: 2px solid #0ff;
+      box-shadow: 0 0 15px #0ff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .neon-title {
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff;
+    }
+    .btn-neon {
+      background: #ff0080;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #ff0080;
+      transition: all 0.3s ease;
+    }
+    .btn-neon:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #ff0080;
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
+<body class="p-4">
 
-  <!-- Login Section -->
-  <div id="login-section" class="min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-sm">
-      <h2 class="text-2xl font-bold text-center mb-6">Login DhaniPoint</h2>
-      <input id="username" type="text" placeholder="Username" class="w-full mb-4 p-2 border rounded" />
-      <input id="password" type="password" placeholder="Password" class="w-full mb-4 p-2 border rounded" />
-      <button onclick="login()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
-    </div>
+<!-- Login Section -->
+<div id="login-section" class="min-h-screen flex items-center justify-center">
+  <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-sm text-black">
+    <h2 class="text-2xl font-bold mb-4 text-center">Login DhaniPoint</h2>
+    <input id="username" type="text" placeholder="Username" class="w-full p-2 border rounded mb-2" />
+    <input id="password" type="password" placeholder="Password" class="w-full p-2 border rounded mb-4" />
+    <button onclick="login()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
+  </div>
+</div>
+
+<!-- Dashboard Section (hidden by default) -->
+<div id="dashboard" class="hidden">
+  <div class="text-center mb-6">
+    <h1 class="text-4xl font-bold neon-title">🔥 DhaniPoint Gamer Dashboard 🔥</h1>
+    <p>Loyalty khusus pelanggan Dhani Market</p>
   </div>
 
-  <!-- Dashboard Section -->
-  <div id="dashboard" class="hidden p-6 max-w-2xl mx-auto">
-    <div class="bg-white p-6 rounded-xl shadow-md">
-      <h2 class="text-xl font-semibold mb-2">Selamat Datang di DhaniPoint 🎉</h2>
-      <p class="mb-4">Program loyalti khusus pelanggan setia Dhani Market.</p>
-
-      <div class="bg-blue-100 p-4 rounded mb-4">
-        <p><strong>Nama / WA Kamu:</strong> <span id="user-wa">0812-XXXX-XXXX</span></p>
-        <p><strong>Total Poin:</strong> <span id="total-point">0</span> DhaniPoint</p>
-      </div>
-
-      <h3 class="font-bold mb-2">Riwayat Transaksi</h3>
-      <table class="w-full text-left mb-4">
-        <thead>
-          <tr><th>Tanggal</th><th>Layanan</th><th>Jumlah</th><th>Poin</th></tr>
-        </thead>
-        <tbody id="transaction-table"></tbody>
-      </table>
-
-      <h3 class="font-bold mb-2">Tukar Hadiah</h3>
-      <table class="w-full text-left mb-4">
-        <thead>
-          <tr><th>Hadiah</th><th>Poin Dibutuhkan</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Diskon R55.000</td><td>20</td></tr>
-          <tr><td>Top-up 70 UC</td><td>50</td></tr>
-          <tr><td>Voucher Diskon Akun Totap 1K</td><td>100</td></tr>
-        </tbody>
-      </table>
-
-      <!-- Dropdown Pilih Hadiah -->
-      <label for="selected-reward" class="block mb-2 font-medium">Pilih Hadiah yang Ingin Ditukar:</label>
-      <select id="selected-reward" class="w-full p-2 mb-4 border rounded">
-        <option value="Diskon R55.000">Diskon R55.000 (20 poin)</option>
-        <option value="Top-up 70 UC">Top-up 70 UC (50 poin)</option>
-        <option value="Voucher Diskon Akun Totap 1K">Voucher Diskon Akun Totap 1K (100 poin)</option>
-      </select>
-
-      <!-- Tombol WA -->
-      <button onclick="tukarkanViaWA()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        TUKARKAN POIN VIA WHATSAPP
-      </button>
-    </div>
-    <p class="text-sm text-gray-500 mt-4">🎉 <strong>Promo Aktif:</strong> Double Point setiap Jumat – Janganakan!</p>
+  <div class="neon-box">
+    <h2 class="text-xl mb-2">📱 WA Kamu:</h2>
+    <p id="wa">-</p>
   </div>
 
-  <script>
-    async function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+  <div class="neon-box">
+    <h2 class="text-xl mb-2">🎯 Total Poin:</h2>
+    <p id="total-point" class="text-3xl font-bold text-green-400">Loading...</p>
+  </div>
 
-      try {
-        const response = await fetch(`https://script.google.com/macros/s/AKfycbyo0BWgXqqlzRAYefBn7XEINg_I9i5jyaToEM7MqQQsxxYst_KpjWpicOHKwBG3Pdp8/exec?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-        const result = await response.json();
+  <div class="neon-box">
+    <h2 class="text-xl mb-2">📜 Riwayat Transaksi</h2>
+    <table class="w-full text-sm text-white border">
+      <thead>
+        <tr class="border-b border-gray-500">
+          <th class="text-left p-2">Tanggal</th>
+          <th class="text-left p-2">Layanan</th>
+          <th class="text-left p-2">Jumlah</th>
+          <th class="text-left p-2">Poin</th>
+        </tr>
+      </thead>
+      <tbody id="transaction-table">
+        <tr><td colspan="4" class="p-2">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-        if (result.success) {
-          document.getElementById("login-section").style.display = "none";
-          document.getElementById("dashboard").classList.remove("hidden");
+  <div class="neon-box mt-6">
+    <h2 class="text-xl mb-2">🏱 Daftar Hadiah</h2>
+    <table class="w-full text-sm text-white border">
+      <thead>
+        <tr class="border-b border-gray-500">
+          <th class="text-left p-2">Hadiah</th>
+          <th class="text-left p-2">Poin Dibutuhkan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="p-2">🔐 Akun Random FF</td><td class="p-2">1000 DhaniPoint</td></tr>
+        <tr><td class="p-2">💸 Voucher Diskon Top-Up</td><td class="p-2">200 DhaniPoint</td></tr>
+        <tr><td class="p-2">🎉 Skin Random ML/FF</td><td class="p-2">500 DhaniPoint</td></tr>
+        <tr><td class="p-2">📦 Pulsa 20K</td><td class="p-2">300 DhaniPoint</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-          document.getElementById("user-wa").innerText = result.wa;
-          document.getElementById("total-point").innerText = result.totalPoint;
+  <div class="text-center">
+    <button onclick="tukarPoin()" class="btn-neon">TUKARKAN POIN</button>
+  </div>
+</div>
 
-          const table = document.getElementById("transaction-table");
-          table.innerHTML = "";
-          result.transactions.forEach(tx => {
-            const row = `<tr><td>${tx.tanggal}</td><td>${tx.layanan}</td><td>${tx.jumlah}</td><td>${tx.poin}</td></tr>`;
-            table.innerHTML += row;
-          });
+<script>
+  const sheetID = "1xczQax4fApe2iKSVxjUeqWewC54gy2LQPaKopWa8k64";
+  const sheetName = "PoinData";
+  const sheetURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json&sheet=${sheetName}`;
 
-        } else {
-          alert("Username atau password salah!");
-        }
-      } catch (error) {
-        console.error("Error saat login:", error);
-        alert("Gagal menghubungi server. Coba ulangi nanti.");
-      }
+  let dataSheet = [];
+
+  fetch(sheetURL)
+    .then(res => res.text())
+    .then(rep => {
+      const json = JSON.parse(rep.substr(47).slice(0, -2));
+      dataSheet = json.table.rows.map(row => {
+        const cells = row.c.map(c => c ? c.v : "");
+        return {
+          username: cells[0],
+          password: cells[1],
+          wa: cells[2],
+          total: cells[3],
+          tgl: cells[4],
+          layanan: cells[5],
+          jumlah: cells[6],
+          poin: cells[7],
+        };
+      });
+    });
+
+  function login() {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+
+    const userData = dataSheet.find(row => row.username === user && row.password === pass);
+
+    if (!userData) {
+      alert("Username atau password salah!");
+      return;
     }
 
-    function tukarkanViaWA() {
-      const waAdmin = "6283137362010"; // GANTI dengan nomor WA Bro Bi
-      const username = document.getElementById("username").value;
-      const totalPoint = document.getElementById("total-point").innerText;
-      const reward = document.getElementById("selected-reward").value;
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("dashboard").classList.remove("hidden");
 
-      const pesan = `Halo kak, saya ingin menukarkan DhaniPoint.\nUsername: ${username}\nTotal Point saya: ${totalPoint}\nHadiah yang ingin ditukar: ${reward}`;
-      const encodedPesan = encodeURIComponent(pesan);
+    document.getElementById("wa").innerText = userData.wa;
+    document.getElementById("total-point").innerText = userData.total + " DhaniPoint";
 
-      window.location.href = `https://wa.me/${waAdmin}?text=${encodedPesan}`;
-    }
-  </script>
+    let tableHTML = "";
+    dataSheet.filter(d => d.username === user).forEach(d => {
+      tableHTML += `<tr><td class="p-2">${d.tgl}</td><td class="p-2">${d.layanan}</td><td class="p-2">${d.jumlah}</td><td class="p-2">${d.poin}</td></tr>`;
+    });
+    document.getElementById("transaction-table").innerHTML = tableHTML;
+  }
+
+  function tukarPoin() {
+    const waNumber = "6281234567890";
+    const pesan = encodeURIComponent("Halo kak, saya ingin menukar poin DhaniPoint saya.");
+    window.open(`https://wa.me/${waNumber}?text=${pesan}`, "_blank");
+  }
+</script>
 
 </body>
 </html>
