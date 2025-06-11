@@ -151,29 +151,36 @@
       });
     });
 
-  function login() {
-    const user = document.getElementById("username").value;
-    const pass = document.getElementById("password").value;
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
 
-    const userData = dataSheet.find(row => row.username === user && row.password === pass);
+  // Ambil semua data transaksi user
+  const userTransaksi = dataSheet.filter(row => row.username === user);
+  const userData = userTransaksi.find(row => row.password === pass);
 
-    if (!userData) {
-      alert("Username atau password salah!");
-      return;
-    }
-
-    document.getElementById("login-section").style.display = "none";
-    document.getElementById("dashboard").classList.remove("hidden");
-
-    document.getElementById("wa").innerText = userData.wa;
-    document.getElementById("total-point").innerText = userData.total + " DhaniPoint";
-
-    let tableHTML = "";
-    dataSheet.filter(d => d.username === user).forEach(d => {
-      tableHTML += `<tr><td class="p-2">${d.tgl}</td><td class="p-2">${d.layanan}</td><td class="p-2">${d.jumlah}</td><td class="p-2">${d.poin}</td></tr>`;
-    });
-    document.getElementById("transaction-table").innerHTML = tableHTML;
+  if (!userData) {
+    alert("Username atau password salah!");
+    return;
   }
+
+  // Tampilkan dashboard
+  document.getElementById("login-section").style.display = "none";
+  document.getElementById("dashboard").classList.remove("hidden");
+
+  // Tampilkan data profil
+  document.getElementById("wa").innerText = userData.wa;
+  document.getElementById("total-point").innerText = userData.total + " DhaniPoint";
+
+  // Ambil 3 transaksi terakhir dan tampilkan
+  const riwayatTerbaru = userTransaksi.slice(-3).reverse(); // Urutan terbaru duluan
+  let tableHTML = "";
+  riwayatTerbaru.forEach(d => {
+    tableHTML += `<tr><td class="p-2">${d.tgl}</td><td class="p-2">${d.layanan}</td><td class="p-2">${d.jumlah}</td><td class="p-2">${d.poin}</td></tr>`;
+  });
+  document.getElementById("transaction-table").innerHTML = tableHTML;
+}
+
 
   function tukarPoin() {
     const waNumber = "6287826578551";
